@@ -1,0 +1,478 @@
+\documentclass[11pt]{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{subcaption}
+\usepackage{comment}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{listings}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage[capitalise]{cleveref}
+
+\usepackage[margin=1in]{geometry}
+\emergencystretch=2em % Lets long \texttt names wrap instead of overflowing the margin
+
+% Items still missing before submission are highlighted in red
+\newcommand{\missing}[1]{\textcolor{red}{[MISSING: #1]}}
+
+% Includes the figure if the file exists; otherwise draws a red placeholder box with the expected path
+\newcommand{\fig}[2]{%
+    \IfFileExists{#2}%
+        {\includegraphics[width=#1]{#2}}%
+        {\fcolorbox{red}{white}{\begin{minipage}[c][3cm][c]{\dimexpr #1-2\fboxsep-2\fboxrule\relax}\centering\color{red}\small MISSING FIGURE\\{\scriptsize\texttt{\detokenize{#2}}}\end{minipage}}}%
+}
+
+% Placeholder box for a figure that has not been taken yet: \missingfig{width}{description}
+\newcommand{\missingfig}[2]{%
+    \fcolorbox{red}{white}{\begin{minipage}[c][3cm][c]{\dimexpr #1-2\fboxsep-2\fboxrule\relax}\centering\color{red}\small MISSING: figure of #2\end{minipage}}%
+}
+
+\lstset{
+    language=Matlab,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue},
+    commentstyle=\color{green!50!black},
+    stringstyle=\color{purple},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    frame=single,
+    breaklines=true,
+    columns=fullflexible,
+    keepspaces=true,
+    literate={°}{{$^\circ$}}1, % listings cannot read UTF-8 characters directly
+}
+
+\title{EECE7324: Laboratory Assignment 4 (Module 5)}
+\author{Andrew Benincasa and Pau Sabater}
+\date{November 2026}
+
+\begin{document}
+
+\maketitle
+
+%=====================================================================
+\section*{Part A: M-PSK}
+%=====================================================================
+\subsection*{Transmitter}
+\begin{enumerate}
+    \item We utilized a fresh copy of the scripts that came with the assignment.
+
+    \item We opened the \texttt{transmitterSC.m} script. Looking at the script, the length of both the pilot and the data bits are defined by multipling the number of symbols by \texttt{log2(M)}, where \texttt{M} defines our modulation order.
+    
+\begin{lstlisting}[firstnumber=97]
+%% Pilot generation (for channel estimation and equalization)
+bitsPilot    = bits(1 : nPilotSymbols * log2(M));
+\end{lstlisting}
+
+    \item We opened the \texttt{symbolMapping.m} function. \texttt{pskmod} takes as inputs the bits, the modulation order, the phase offset, the symbol order, and the input type (whether we are inputting bits or integers). The \texttt{bits} are the bits that we are looking to modulate, and the symbol order defines what symbols correspond to what mappings, which you can define either Gray coding or \texttt{bin} (natural binary-coded ordering). 
+    
+    %\missing{What \texttt{pskmod()} does, its inputs and its output.}
+
+    \item Yes, the function currently uses Gray coding. As described in the previous question, this can be changed to \texttt{bin} which utilizes natural binary-coded ordering.
+    
+    %\missing{Whether the function uses Gray coding, and whether it can be used without Gray coding.}
+    
+    \item We generated the following waveforms at the transmitter:
+    \begin{enumerate}[label=\alph*)]
+        \item MPSK with $M = 2, 4, 8, 16$ and $32$, with and without Gray coding. \missing{Waveform file names and any edits to \texttt{transmitterSC.m}.}
+\begin{lstlisting}
+% MISSING: edits to transmitterSC.m
+\end{lstlisting}
+
+        \item We plotted the generated constellations (\cref{fig:tx-psk-gray,fig:tx-psk-nogray}).
+        \begin{enumerate}[label=\roman*.]
+            \item \missing{What happens for high modulation orders.}
+            \item \missing{Is this a problem?}
+            \item \missing{How it could be addressed.}
+        \end{enumerate}
+    \end{enumerate}
+
+    \begin{figure}[H]
+        \centering
+        \begin{subfigure}{0.32\linewidth}\centering\missingfig{\linewidth}{generated 2-PSK constellation, Gray}\caption{$M=2$}\end{subfigure}\hfill
+        \begin{subfigure}{0.32\linewidth}\centering\missingfig{\linewidth}{generated 4-PSK constellation, Gray}\caption{$M=4$}\end{subfigure}\hfill
+        \begin{subfigure}{0.32\linewidth}\centering\missingfig{\linewidth}{generated 8-PSK constellation, Gray}\caption{$M=8$}\end{subfigure}\\[1ex]
+        \begin{subfigure}{0.32\linewidth}\centering\missingfig{\linewidth}{generated 16-PSK constellation, Gray}\caption{$M=16$}\end{subfigure}
+        \begin{subfigure}{0.32\linewidth}\centering\missingfig{\linewidth}{generated 32-PSK constellation, Gray}\caption{$M=32$}\end{subfigure}
+        \caption{Generated M-PSK constellations with Gray coding. \missing{caption}}
+        \label{fig:tx-psk-gray}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \begin{subfigure}{0.32\linewidth}\centering\missingfig{\linewidth}{generated 2-PSK constellation, non-Gray}\caption{$M=2$}\end{subfigure}\hfill
+        \begin{subfigure}{0.32\linewidth}\centering\missingfig{\linewidth}{generated 4-PSK constellation, non-Gray}\caption{$M=4$}\end{subfigure}\hfill
+        \begin{subfigure}{0.32\linewidth}\centering\missingfig{\linewidth}{generated 8-PSK constellation, non-Gray}\caption{$M=8$}\end{subfigure}\\[1ex]
+        \begin{subfigure}{0.32\linewidth}\centering\missingfig{\linewidth}{generated 16-PSK constellation, non-Gray}\caption{$M=16$}\end{subfigure}
+        \begin{subfigure}{0.32\linewidth}\centering\missingfig{\linewidth}{generated 32-PSK constellation, non-Gray}\caption{$M=32$}\end{subfigure}
+        \caption{Generated M-PSK constellations without Gray coding. \missing{caption}}
+        \label{fig:tx-psk-nogray}
+    \end{figure}
+
+    \item \label{step:psk-capture} Utilizing the same workflow as in the previous module, we generated the signals with the SG and saved them with the DSO:
+    \begin{enumerate}[label=\alph*)]
+        \item First, utilizing a wired connection (\cref{fig:setup-wired}). We connected the SG RF Out to Channel 1 of the DSO with a cable. \missing{SG settings: carrier frequency, amplitude, sample rate, Dual Arb; DSO settings.}
+        \item Second, utilizing a wireless connection (\cref{fig:setup-wireless}), with the transmitter and the receiver at a distance at which we expect to see channel errors based on our findings in Module 4. \missing{Distance chosen and justification.}
+    \end{enumerate}
+
+    \begin{figure}[H]
+        \centering
+        \begin{subfigure}{0.48\linewidth}\centering\missingfig{\linewidth}{DSO capture, wired}\caption{Wired.}\end{subfigure}\hfill
+        \begin{subfigure}{0.48\linewidth}\centering\missingfig{\linewidth}{DSO capture, wireless}\caption{Wireless.}\end{subfigure}
+        \caption{\missing{caption}}
+        \label{fig:dso-psk}
+    \end{figure}
+\end{enumerate}
+
+\subsection*{Receiver}
+\begin{enumerate}\setcounter{enumi}{6}
+    \item We opened the \texttt{receiverSC.m} script and made sure that the parameters match those in the transmitter. \missing{Parameters checked / changed.}
+\begin{lstlisting}
+% MISSING: edits to receiverSC.m
+\end{lstlisting}
+
+    \item We opened the \texttt{correlationReceiver.m} function.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lll}
+\toprule
+\textbf{MATLAB Variable} & \textbf{Mathematical Notation} & \textbf{Description} \\
+\midrule
+\texttt{r} & $r[k]$ or $\mathbf{r} \in \mathbb{R}^{N_{\text{pulse}}}$ & Discrete-time received signal vector \\
+\texttt{sps} & $L$ & Oversampling factor (samples per symbol) \\
+\texttt{nSymbols} & $N_{\text{symbols}}$ & Total number of symbols to process \\
+\bottomrule
+\end{tabular}
+\caption{Input variables. Mapping between MATLAB code constructs and mathematical symbols.}
+\end{table}
+
+     The MATLAB code implements a discrete-time matched filter (correlator receiver) using a square root raised cosine (SRRC) pulse shape. \newline
+     
+    The mathematical equation for computing the $i$-th symbol, $\hat{s}_i$, is given by the inner product of the received signal with the pulse shape:
+
+\begin{equation}
+\hat{s}_i = \langle p, r_i \rangle=\mathbf{p}^T \mathbf{r}=\sum_{n=1}^{N_{\text{pulse}}} p[n] \cdot r\Big[n + (i - 1) \cdot L\Big], \quad \text{for } i = 1, 2, \dots, N_{\text{symbols}}
+\end{equation}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lll}
+\toprule
+\textbf{MATLAB Variable} & \textbf{Mathematical Notation} & \textbf{Description} \\
+\midrule
+\texttt{pulse} & $p[n]$ or $\mathbf{p}\in \mathbb{R}^{N_{\text{pulse}}}$ & Discrete impulse response of SRRC filter \\
+\texttt{nPulseSamples} & $N_{\text{pulse}}$ & Total length of the pulse filter (samples) \\
+\texttt{iSymbol} & $i$ & Index of the current symbol \\
+\bottomrule
+\end{tabular}
+\caption{Intermediate and output variables. Mapping between MATLAB code constructs and mathematical symbols.}
+\end{table}
+
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lll}
+\toprule
+\textbf{MATLAB Variable} & \textbf{Mathematical Notation} & \textbf{Description} \\
+\midrule
+\texttt{symbols(iSymbol)} & $\hat{s}_i$ or $\text{symbols}[i]$ & $i$-th demodulated symbol output \\
+\bottomrule
+\end{tabular}
+\caption{Output variables. Mapping between MATLAB code constructs and mathematical symbols.}
+\end{table}
+
+
+
+    \item We opened the \texttt{symbolDemapping.m} function and made sure it uses the same encoding (Gray/not Gray) as the transmitter. \missing{What \texttt{pskdemod()} does.}
+
+Z = pskdemod(Y,M) demodulates the input M-PSK modulated signals Y. M specifies the modulation order, specified as an integer value greater than 1.
+
+The output Z is the M-PSK demodulated output signal. The value and dimension of this output vary depending on the specified OutputType value. With 'bit', it directly returns the demodulated bits. The number of rows in Z is log2(M) times the number of rows in Y. The function maps each demodulated symbol to a group of log2(M) bits, where the first bit represents the MSB and the last bit represents the LSB.
+
+
+
+    
+\begin{lstlisting}
+% MISSING: edits to symbolDemapping.m (Gray / non-Gray)
+\end{lstlisting}
+
+    \item \label{step:psk-tables} \missing{How SNR, $E_b/N_0$, SER, and BER were obtained.}
+
+    \textbf{Relation between SNR and $E_b/N_0$ (Hint 2).} 
+    
+\begin{equation}
+    SNR = \frac{P_S}{P_N} \qquad \text{where} \qquad P_N= N_0 \cdot B, \quad P_S = \frac{E_S}{T_S},\quad E_S = E_{bit} \cdot log2(M)
+\end{equation} 
+where $P_S$ is the signal power and $P_N$ is the noise power, $B$ is the oscilloscope bandwidth, $E_S$ is the signal energy, $T_S$ is the signal sample duration and $E_{bit}$ is the energy per bit. Therefore:
+
+\begin{equation}
+    SNR = \frac{E_{bit}\cdot log2(M)}{T_S\cdot N_0 \cdot B} 
+\end{equation} 
+
+If we are peaky, what we measure is $P_S + P_N$
+
+    \begin{table}[H]
+        \centering
+        \small
+        \setlength{\tabcolsep}{4pt}
+        \begin{tabular}{c|cc|cc|cc|cc}
+            \hline
+            \multirow{2}{*}{\shortstack{Modulation\\order}} & \multicolumn{2}{c|}{SNR (dB)} & \multicolumn{2}{c|}{$E_b/N_0$ (dB)} & \multicolumn{2}{c|}{SER} & \multicolumn{2}{c}{BER} \\
+             & Wired & Wireless & Wired & Wireless & Wired & Wireless & Wired & Wireless \\
+            \hline
+            2  &  &  &  &  &  &  &  &  \\
+            4  &  &  &  &  &  &  &  &  \\
+            8  &  &  &  &  &  &  &  &  \\
+            16 &  &  &  &  &  &  &  &  \\
+            32 &  &  &  &  &  &  &  &  \\
+            \hline
+        \end{tabular}
+        \caption{M-PSK with Gray coded signals.}
+        \label{tab:psk-gray}
+    \end{table}
+
+    \begin{table}[H]
+        \centering
+        \small
+        \setlength{\tabcolsep}{4pt}
+        \begin{tabular}{c|cc|cc|cc|cc}
+            \hline
+            \multirow{2}{*}{\shortstack{Modulation\\order}} & \multicolumn{2}{c|}{SNR (dB)} & \multicolumn{2}{c|}{$E_b/N_0$ (dB)} & \multicolumn{2}{c|}{SER} & \multicolumn{2}{c}{BER} \\
+             & Wired & Wireless & Wired & Wireless & Wired & Wireless & Wired & Wireless \\
+            \hline
+            2  &  &  &  &  &  &  &  &  \\
+            4  &  &  &  &  &  &  &  &  \\
+            8  &  &  &  &  &  &  &  &  \\
+            16 &  &  &  &  &  &  &  &  \\
+            32 &  &  &  &  &  &  &  &  \\
+            \hline
+        \end{tabular}
+        \caption{M-PSK without Gray coded signals.}
+        \label{tab:psk-nogray}
+    \end{table}
+
+    Signal power 2PSK No-Grey: 11.563 dBm
+    
+    4PSK No-grey: 5.820
+    
+    8PSK No-grey:
+    
+    16PSK No-grey:
+    
+    32PSK No-grey:
+
+    Signal power 2PSK Grey:
+    
+    4PSK grey: 5.820
+    
+    8PSK grey:
+    
+    16PSK grey:
+    
+    32PSK grey:
+    
+    
+    
+    \begin{figure}[H]
+        \centering
+        \begin{subfigure}{0.32\linewidth}\centering\missingfig{\linewidth}{received 2-PSK constellation}\caption{$M=2$}\end{subfigure}\hfill
+        \begin{subfigure}{0.32\linewidth}\centering\missingfig{\linewidth}{received 4-PSK constellation}\caption{$M=4$}\end{subfigure}\hfill
+        \begin{subfigure}{0.32\linewidth}\centering\missingfig{\linewidth}{received 8-PSK constellation}\caption{$M=8$}\end{subfigure}\\[1ex]
+        \begin{subfigure}{0.32\linewidth}\centering\missingfig{\linewidth}{received 16-PSK constellation}\caption{$M=16$}\end{subfigure}
+        \begin{subfigure}{0.32\linewidth}\centering\missingfig{\linewidth}{received 32-PSK constellation}\caption{$M=32$}\end{subfigure}
+        \caption{Received M-PSK constellations, wired. \missing{caption}}
+        \label{fig:rx-psk-wired}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \begin{subfigure}{0.32\linewidth}\centering\missingfig{\linewidth}{received 2-PSK constellation}\caption{$M=2$}\end{subfigure}\hfill
+        \begin{subfigure}{0.32\linewidth}\centering\missingfig{\linewidth}{received 4-PSK constellation}\caption{$M=4$}\end{subfigure}\hfill
+        \begin{subfigure}{0.32\linewidth}\centering\missingfig{\linewidth}{received 8-PSK constellation}\caption{$M=8$}\end{subfigure}\\[1ex]
+        \begin{subfigure}{0.32\linewidth}\centering\missingfig{\linewidth}{received 16-PSK constellation}\caption{$M=16$}\end{subfigure}
+        \begin{subfigure}{0.32\linewidth}\centering\missingfig{\linewidth}{received 32-PSK constellation}\caption{$M=32$}\end{subfigure}
+        \caption{Received M-PSK constellations, wireless. \missing{caption}}
+        \label{fig:rx-psk-wireless}
+    \end{figure}
+
+    \item \missing{Are the results statistically meaningful? What would increase the validity of the study?}
+
+    \item \missing{Main factors impacting the BER, explained utilizing the constellation.}
+
+    \item \missing{Comparison of SER and BER between Gray and non-Gray coded signals.}
+
+    \item \textit{Optional:} The error vector magnitude or EVM (sometimes also called relative constellation error or RCE) is a measure used to quantify the performance of a digital radio transmitter or receiver. A signal sent by an ideal transmitter or received by a receiver would have all constellation points precisely at the ideal locations, however various imperfections in the implementation (such as carrier leakage, low image rejection ratio, phase noise etc.) cause the actual constellation points to deviate from the ideal locations. Informally, EVM is a measure of how far the points are from the ideal locations.
+
+    An error vector is a vector in the I-Q plane between the ideal constellation point and the point received by the receiver. In other words, it is the difference between actual received symbols and ideal symbols. The root mean square (RMS) average amplitude of the error vector, normalized to ideal signal amplitude reference, is the EVM. EVM is generally expressed in percent by multiplying the ratio by 100.
+
+
+    \begin{equation}
+        \missing{EVM definition}
+        \label{eq:evm}
+    \end{equation}
+\begin{lstlisting}
+% MISSING: EVM computation code
+\end{lstlisting}
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{lcc}
+            \hline
+            Constellation & EVM (\%) & EVM (dB) \\
+            \hline
+             &  &  \\
+             &  &  \\
+            \hline
+        \end{tabular}
+        \caption{EVM of some received constellations.}
+        \label{tab:evm}
+    \end{table}
+\end{enumerate}
+
+%=====================================================================
+\section*{Part B: M-QAM}
+%=====================================================================
+\subsection*{Transmitter}
+\begin{enumerate}\setcounter{enumi}{14}
+    \item We opened \texttt{symbolMapping.m}:
+    \begin{enumerate}[label=\alph*)]
+        \item We generated the complex symbols using the M-QAM scheme. \missing{Use of \texttt{qammod()} and normalization to unit average power, consistent with M-PSK.}
+\begin{lstlisting}
+% MISSING: M-QAM mapping in symbolMapping.m
+\end{lstlisting}
+    \end{enumerate}
+
+    \item We validated our results by observing the generated constellations (\cref{fig:tx-qam}). \missing{Observations.}
+
+    \item We generated the following waveforms at the transmitter:
+    \begin{enumerate}[label=\alph*)]
+        \item MQAM with $M = 4, 8, 16$ and $32$, with Gray coding. \missing{Waveform file names.}
+    \end{enumerate}
+
+    \begin{figure}[H]
+        \centering
+        \begin{subfigure}{0.24\linewidth}\centering\missingfig{\linewidth}{generated 4-QAM constellation}\caption{$M=4$}\end{subfigure}\hfill
+        \begin{subfigure}{0.24\linewidth}\centering\missingfig{\linewidth}{generated 8-QAM constellation}\caption{$M=8$}\end{subfigure}\hfill
+        \begin{subfigure}{0.24\linewidth}\centering\missingfig{\linewidth}{generated 16-QAM constellation}\caption{$M=16$}\end{subfigure}\hfill
+        \begin{subfigure}{0.24\linewidth}\centering\missingfig{\linewidth}{generated 32-QAM constellation}\caption{$M=32$}\end{subfigure}
+        \caption{Generated M-QAM constellations with Gray coding. \missing{caption}}
+        \label{fig:tx-qam}
+    \end{figure}
+
+    \item We repeated Step~\ref{step:psk-capture} with the new signals:
+    \begin{enumerate}[label=\alph*)]
+        \item Wired connection. \missing{Settings, if different from Step~\ref{step:psk-capture}.}
+        \item Wireless connection. \missing{Distance, if different from Step~\ref{step:psk-capture}.}
+    \end{enumerate}
+\end{enumerate}
+
+\subsection*{Receiver}
+\begin{enumerate}\setcounter{enumi}{18}
+    \item We opened \texttt{symbolDemapping.m} and implemented the M-QAM detection. \missing{Use of \texttt{qamdemod()}.}
+\begin{lstlisting}
+% MISSING: M-QAM demapping in symbolDemapping.m
+\end{lstlisting}
+
+    \item We validated our results by observing the obtained constellations for some of the experiments (\cref{fig:rx-qam}), without normalizing the I and Q values. \missing{Observations.}
+
+    \begin{figure}[H]
+        \centering
+        \begin{subfigure}{0.24\linewidth}\centering\missingfig{\linewidth}{received 4-QAM constellation}\caption{$M=4$}\end{subfigure}\hfill
+        \begin{subfigure}{0.24\linewidth}\centering\missingfig{\linewidth}{received 8-QAM constellation}\caption{$M=8$}\end{subfigure}\hfill
+        \begin{subfigure}{0.24\linewidth}\centering\missingfig{\linewidth}{received 16-QAM constellation}\caption{$M=16$}\end{subfigure}\hfill
+        \begin{subfigure}{0.24\linewidth}\centering\missingfig{\linewidth}{received 32-QAM constellation}\caption{$M=32$}\end{subfigure}
+        \caption{Received M-QAM constellations. \missing{caption (wired/wireless)}}
+        \label{fig:rx-qam}
+    \end{figure}
+
+    \item \missing{How the values were obtained, if different from Step~\ref{step:psk-tables}.}
+    \begin{table}[H]
+        \centering
+        \small
+        \setlength{\tabcolsep}{4pt}
+        \begin{tabular}{c|cc|cc|cc|cc}
+            \hline
+            \multirow{2}{*}{\shortstack{Modulation\\order}} & \multicolumn{2}{c|}{SNR (dB)} & \multicolumn{2}{c|}{$E_b/N_0$ (dB)} & \multicolumn{2}{c|}{SER} & \multicolumn{2}{c}{BER} \\
+             & Wired & Wireless & Wired & Wireless & Wired & Wireless & Wired & Wireless \\
+            \hline
+            4  &  &  &  &  &  &  &  &  \\
+            8  &  &  &  &  &  &  &  &  \\
+            16 &  &  &  &  &  &  &  &  \\
+            32 &  &  &  &  &  &  &  &  \\
+            \hline
+        \end{tabular}
+        \caption{M-QAM with Gray coded signals.}
+        \label{tab:qam-gray}
+    \end{table}
+
+    \item \missing{Comparison of the performance of M-QAM and M-PSK.}
+
+    \item \textit{Optional:} Peak to Average Power Ratio (PAPR). \missing{Explanation of the PAPR in our own words.}
+    \begin{equation}
+        \missing{PAPR definition}
+        \label{eq:papr}
+    \end{equation}
+\begin{lstlisting}
+% MISSING: PAPR computation code
+\end{lstlisting}
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{cc}
+            \hline
+            $M$ & PAPR (dB) \\
+            \hline
+            4  &  \\
+            8  &  \\
+            16 &  \\
+            32 &  \\
+            \hline
+        \end{tabular}
+        \caption{PAPR of the received M-QAM constellations as a function of $M$.}
+        \label{tab:papr}
+    \end{table}
+\end{enumerate}
+
+%=====================================================================
+\section*{Part C: Matched Filter Receiver}
+%=====================================================================
+\begin{enumerate}\setcounter{enumi}{23}
+    \item We copied the \texttt{correlationReceiver.m} function and renamed it as \texttt{matchedFilter.m}.
+
+    \item We opened \texttt{matchedFilter.m} and made the minimal changes to implement a matched filter receiver instead of a correlation receiver. \missing{Description of the change.}
+\begin{lstlisting}
+% MISSING: line replaced in matchedFilter.m (before / after)
+\end{lstlisting}
+    \begin{equation}
+        \missing{matched filter in mathematical notation}
+        \label{eq:matched}
+    \end{equation}
+
+    \item \missing{Comparison of the matched filtering at the receiver with the pulse shaping at the transmitter.}
+
+    \item \missing{Validation: whether the results are the same as with the correlation receiver.}
+    \begin{figure}[H]
+        \centering
+        \begin{subfigure}{0.48\linewidth}\centering\missingfig{\linewidth}{constellation with correlation receiver}\caption{Correlation receiver.}\end{subfigure}\hfill
+        \begin{subfigure}{0.48\linewidth}\centering\missingfig{\linewidth}{constellation with matched filter receiver}\caption{Matched filter receiver.}\end{subfigure}
+        \caption{\missing{caption}}
+        \label{fig:mf-compare}
+    \end{figure}
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{lcccc}
+            \hline
+            Signal & SER (correlation) & SER (matched filter) & BER (correlation) & BER (matched filter) \\
+            \hline
+             &  &  &  &  \\
+             &  &  &  &  \\
+            \hline
+        \end{tabular}
+        \caption{Comparison of the correlation and matched filter receivers.}
+        \label{tab:mf-compare}
+    \end{table}
+\end{enumerate}
+
+\end{document}
