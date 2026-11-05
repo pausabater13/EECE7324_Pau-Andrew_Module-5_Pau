@@ -8,12 +8,13 @@ Scripts_Module5/captures/
 Laboratory Assignment 4 (Module 5).pdf
 
 # LaTeX build files.
-report/*.aux
-report/*.log
-report/*.out
-report/*.fls
-report/*.fdb_latexmk
-report/*.synctex.gz
+*.aux
+*.log
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+/main.pdf
 report/main.pdf
 
 # macOS.
