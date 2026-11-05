@@ -41,7 +41,7 @@ for s = 1:2
         axis(ax, "equal"); grid(ax, "on"); xlim(ax, [-1.4 1.4]); ylim(ax, [-1.4 1.4]);
         title(ax, sprintf("%d-PSK", M)); xlabel(ax, "I"); ylabel(ax, "Q");
     end
-    out = fullfile(root, "..", "report", "figures", "rx_psk_" + sets(s, 1) + ".pdf");
+    out = fullfile(root, "..", "figures", "rx_psk_" + sets(s, 1) + ".pdf");
     exportgraphics(f0, out, ContentType="vector");
     fprintf("Saved %s\n", out);
 end

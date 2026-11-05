@@ -1,7 +1,7 @@
 function plotSpectrum()
 %PLOTSPECTRUM Our script (Step 10). Plots the PSD of the wired and wireless 16-PSK Gray captures
 % around the carrier, with the signal band and the band used for the noise floor, and saves it to
-% report/figures/psd_16psk_gray.pdf.
+% figures/psd_16psk_gray.pdf.
 
 root = fullfile(fileparts(mfilename("fullpath")), "..");   % Scripts_Module5
 files = ["captures/wired/6a_16psk_gray.mat", "captures/wireless/6b_16psk_gray.mat"];
@@ -26,7 +26,7 @@ for side = [-1 1]
 end
 xlabel(ax, "f - 2.4 GHz (MHz)"); ylabel(ax, "PSD (dBm/MHz)");
 legend(ax, Location="northeast"); grid(ax, "on"); xlim(ax, [-450 450]); ylim(ax, yl);
-out = fullfile(root, "..", "report", "figures", "psd_16psk_gray.pdf");
+out = fullfile(root, "..", "figures", "psd_16psk_gray.pdf");
 exportgraphics(f0, out, ContentType="vector");
 fprintf("Saved %s\n", out);
 end

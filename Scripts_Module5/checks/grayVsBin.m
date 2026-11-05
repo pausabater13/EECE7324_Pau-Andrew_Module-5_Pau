@@ -4,7 +4,7 @@ function grayVsBin()
 % symbol. Then it counts the bit errors of the SAME decisions with the two bit mappings (Gray and
 % binary), so the SER is the same by construction and only the bits change. For each M, the noise
 % is set to the Es/N0 at which the theoretical SER of M-PSK is about 1e-2. The table rows are
-% written to report/tables/gray_vs_bin.tex.
+% written to tables/gray_vs_bin.tex.
 
 root = fullfile(fileparts(mfilename("fullpath")), "..");   % Scripts_Module5
 oldDir = cd(root);
@@ -13,7 +13,7 @@ cleanup = onCleanup(@() cd(oldDir));
 src = fileread("receiverSC.m");
 rng(0); % Same noise every time.
 nReal = 200; % Noise realizations.
-outFile = fullfile(root, "..", "report", "tables", "gray_vs_bin.tex");
+outFile = fullfile(root, "..", "tables", "gray_vs_bin.tex");
 fid = fopen(outFile, "w");
 closefile = onCleanup(@() fclose(fid));
 fprintf(" M  Es/N0[dB]   SER       BER Gray  BER bin   BER/SER Gray  BER/SER bin  1/log2(M)\n");

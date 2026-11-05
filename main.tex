@@ -118,7 +118,7 @@ function symbols = symbolMapping(bits, M, modScheme, symOrder)
 
     \begin{figure}[H]
         \centering
-        \fig{\linewidth}{report/figures/tx_psk.pdf}
+        \fig{\linewidth}{figures/tx_psk.pdf}
         \caption{Generated M-PSK data constellations with Gray (top) and binary (bottom) order, with the bits of each point.}
         \label{fig:tx-psk}
     \end{figure}
@@ -204,7 +204,7 @@ function bits = symbolDemapping(symbols, M, modScheme, symOrder)
             \multirow{2}{*}{\shortstack{Modulation\\order}} & \multicolumn{2}{c|}{SNR (dB)} & \multicolumn{2}{c|}{$E_b/N_0$ (dB)} & \multicolumn{2}{c|}{SER} & \multicolumn{2}{c}{BER} \\
              & Wired & Wireless & Wired & Wireless & Wired & Wireless & Wired & Wireless \\
             \hline
-            \inputtable{report/tables/psk_gray.tex}
+            \inputtable{tables/psk_gray.tex}
         \end{tabular}
         \caption{M-PSK with Gray coded signals (one frame per capture: 300 symbols, $300\log_2 M$ bits).}
         \label{tab:psk-gray}
@@ -219,7 +219,7 @@ function bits = symbolDemapping(symbols, M, modScheme, symOrder)
             \multirow{2}{*}{\shortstack{Modulation\\order}} & \multicolumn{2}{c|}{SNR (dB)} & \multicolumn{2}{c|}{$E_b/N_0$ (dB)} & \multicolumn{2}{c|}{SER} & \multicolumn{2}{c}{BER} \\
              & Wired & Wireless & Wired & Wireless & Wired & Wireless & Wired & Wireless \\
             \hline
-            \inputtable{report/tables/psk_bin.tex}
+            \inputtable{tables/psk_bin.tex}
         \end{tabular}
         \caption{M-PSK without Gray coded signals (one frame per capture: 300 symbols, $300\log_2 M$ bits).}
         \label{tab:psk-bin}
@@ -227,7 +227,7 @@ function bits = symbolDemapping(symbols, M, modScheme, symOrder)
 
     \begin{figure}[H]
         \centering
-        \fig{\linewidth}{report/figures/psd_16psk_gray.pdf}
+        \fig{\linewidth}{figures/psd_16psk_gray.pdf}
         \caption{PSD of the wired and wireless 16-PSK Gray captures, with the signal band (green) and the band used for the noise floor (gray). Made with our script \texttt{checks/plotSpectrum.m}.}
         \label{fig:psd}
     \end{figure}
@@ -252,10 +252,10 @@ function bits = symbolDemapping(symbols, M, modScheme, symOrder)
 
     \begin{figure}[H]
         \centering
-        \begin{subfigure}{\linewidth}\centering\fig{\linewidth}{report/figures/rx_psk_wired.pdf}\caption{Wired.}\end{subfigure}
+        \begin{subfigure}{\linewidth}\centering\fig{\linewidth}{figures/rx_psk_wired.pdf}\caption{Wired.}\end{subfigure}
 
         \vspace{0.5em}
-        \begin{subfigure}{\linewidth}\centering\fig{\linewidth}{report/figures/rx_psk_wireless.pdf}\caption{Wireless.}\end{subfigure}
+        \begin{subfigure}{\linewidth}\centering\fig{\linewidth}{figures/rx_psk_wireless.pdf}\caption{Wireless.}\end{subfigure}
         \caption{Received M-PSK data constellations with Gray coding (blue) and the ideal points (red). The received symbols of each capture are only divided by their mean amplitude, so that they can be drawn on top of the ideal points.}
         \label{fig:rx-psk}
     \end{figure}
@@ -278,7 +278,7 @@ function bits = symbolDemapping(symbols, M, modScheme, symOrder)
             \multirow{2}{*}{$M$ (Gray)} & \multicolumn{2}{c|}{Wired} & \multicolumn{2}{c}{Wireless} \\
              & EVM (\%) & EVM (dB) & EVM (\%) & EVM (dB) \\
             \hline
-            \inputtable{report/tables/evm.tex}
+            \inputtable{tables/evm.tex}
         \end{tabular}
         \caption{RMS EVM of the received data symbols (one frame, 300 symbols).}
         \label{tab:evm}
@@ -303,7 +303,7 @@ function bits = symbolDemapping(symbols, M, modScheme, symOrder)
 
     \begin{figure}[H]
         \centering
-        \fig{\linewidth}{report/figures/tx_qam.pdf}
+        \fig{\linewidth}{figures/tx_qam.pdf}
         \caption{Generated M-QAM data constellations with Gray coding, with the bits of each point.}
         \label{fig:tx-qam}
     \end{figure}
@@ -338,10 +338,10 @@ function bits = symbolDemapping(symbols, M, modScheme, symOrder)
 
     \begin{figure}[H]
         \centering
-        \begin{subfigure}{\linewidth}\centering\fig{\linewidth}{report/figures/rx_qam_wired.pdf}\caption{Wired.}\end{subfigure}
+        \begin{subfigure}{\linewidth}\centering\fig{\linewidth}{figures/rx_qam_wired.pdf}\caption{Wired.}\end{subfigure}
 
         \vspace{0.5em}
-        \begin{subfigure}{\linewidth}\centering\fig{\linewidth}{report/figures/rx_qam_wireless.pdf}\caption{Wireless.}\end{subfigure}
+        \begin{subfigure}{\linewidth}\centering\fig{\linewidth}{figures/rx_qam_wireless.pdf}\caption{Wireless.}\end{subfigure}
         \caption{Received M-QAM data constellations (blue), without normalizing I or Q, and the ideal points scaled by the RMS value of the received symbols (red).}
         \label{fig:rx-qam}
     \end{figure}
@@ -357,7 +357,7 @@ function bits = symbolDemapping(symbols, M, modScheme, symOrder)
             \multirow{2}{*}{\shortstack{Modulation\\order}} & \multicolumn{2}{c|}{SNR (dB)} & \multicolumn{2}{c|}{$E_b/N_0$ (dB)} & \multicolumn{2}{c|}{SER} & \multicolumn{2}{c}{BER} \\
              & Wired & Wireless & Wired & Wireless & Wired & Wireless & Wired & Wireless \\
             \hline
-            \inputtable{report/tables/qam_gray.tex}
+            \inputtable{tables/qam_gray.tex}
         \end{tabular}
         \caption{M-QAM with Gray coded signals (one frame per capture: 300 symbols, $300\log_2 M$ bits).}
         \label{tab:qam-gray}
@@ -379,7 +379,7 @@ function bits = symbolDemapping(symbols, M, modScheme, symOrder)
             \multirow{2}{*}{$M$} & \multicolumn{2}{c|}{Transmitted (dB)} & \multicolumn{2}{c}{Received (dB)} \\
              & All $M$ points & 300 data symbols & Wired & Wireless \\
             \hline
-            \inputtable{report/tables/papr.tex}
+            \inputtable{tables/papr.tex}
         \end{tabular}
         \caption{PAPR of the M-QAM symbols.}
         \label{tab:papr}

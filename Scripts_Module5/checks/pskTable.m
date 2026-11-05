@@ -1,7 +1,7 @@
 function pskTable()
 %PSKTABLE Our script (Steps 10 and 21). For every capture of Steps 6 and 18, estimates the SNR from
 % the spectrum, converts it to Eb/N0, runs receiverSC.m to get the SER and BER, and writes the
-% tables to report/tables/psk_gray.tex, psk_bin.tex (Step 10) and qam_gray.tex (Step 21).
+% tables to tables/psk_gray.tex, psk_bin.tex (Step 10) and qam_gray.tex (Step 21).
 %
 % SNR: Welch PSD of the whole capture. The power in the signal band B = (1+beta)*Rs = 43.75 MHz
 % around fc is P_S + P_N. The noise PSD N0 is the median of the PSD between 100 and 400 MHz from
@@ -17,7 +17,7 @@ Rs = 25e6; fc = 2.4e9; B = 1.75 * Rs;
 Ms = [2 4 8 16 32];
 sets = ["wired", "6a"; "wireless", "6b"];
 src = fileread("receiverSC.m");
-outDir = fullfile(root, "..", "report", "tables");
+outDir = fullfile(root, "..", "tables");
 if ~isfolder(outDir), mkdir(outDir); end
 
 for o = ["gray", "bin"]

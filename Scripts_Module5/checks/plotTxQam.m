@@ -1,12 +1,12 @@
 function plotTxQam()
 %PLOTTXQAM Our script (Steps 16 and 17). Runs transmitterSC.m with modScheme = "qam" and Gray
 % order for M = 4, 8, 16, 32 (which also writes the 4 .WAVEFORM files, moved to qam/), plots the
-% generated data constellations with the bits of each point in report/figures/tx_qam.pdf, and
+% generated data constellations with the bits of each point in figures/tx_qam.pdf, and
 % prints, for each M, the average power of the constellation, the minimum distance between points
 % (QAM and PSK), and how many pairs of neighboring points differ in more than one bit.
 
 root = fullfile(fileparts(mfilename("fullpath")), "..");   % Scripts_Module5
-figOut = fullfile(root, "..", "report", "figures", "tx_qam.pdf");
+figOut = fullfile(root, "..", "figures", "tx_qam.pdf");
 oldDir = cd(root);
 cleanup = onCleanup(@() cd(oldDir));
 if ~isfolder("qam"), mkdir("qam"); end

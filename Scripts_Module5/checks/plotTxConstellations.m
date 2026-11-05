@@ -2,10 +2,10 @@ function plotTxConstellations()
 %PLOTTXCONSTELLATIONS Our script (Step 5). Runs transmitterSC.m for M = 2, 4, 8, 16, 32
 % with Gray and binary order (which also writes the 10 .WAVEFORM files, moved to gray/ and
 % bin/), and plots the
-% generated data constellations with the bits of each point in report/figures/tx_psk.pdf.
+% generated data constellations with the bits of each point in figures/tx_psk.pdf.
 
 root = fullfile(fileparts(mfilename("fullpath")), "..");   % Scripts_Module5
-figOut = fullfile(root, "..", "report", "figures", "tx_psk.pdf");
+figOut = fullfile(root, "..", "figures", "tx_psk.pdf");
 
 oldDir = cd(root);
 cleanup = onCleanup(@() cd(oldDir));

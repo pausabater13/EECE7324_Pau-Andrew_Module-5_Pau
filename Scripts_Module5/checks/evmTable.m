@@ -3,7 +3,7 @@ function evmTable()
 % RMS EVM of the received data symbols against the transmitted ones, normalized by the average
 % power of the transmitted symbols (as comm.EVM does by default). The received symbols are first
 % multiplied by one real factor, so that they have the same average power as the transmitted ones.
-% It checks the result against comm.EVM and writes the table rows to report/tables/evm.tex.
+% It checks the result against comm.EVM and writes the table rows to tables/evm.tex.
 
 root = fullfile(fileparts(mfilename("fullpath")), "..");   % Scripts_Module5
 oldDir = cd(root);
@@ -25,7 +25,7 @@ for s = 1:2
     end
 end
 
-fid = fopen(fullfile(root, "..", "report", "tables", "evm.tex"), "w");
+fid = fopen(fullfile(root, "..", "tables", "evm.tex"), "w");
 closefile = onCleanup(@() fclose(fid));
 for k = 1:numel(Ms)
     fprintf(fid, "%d & %.1f & $%.1f$ & %.1f & $%.1f$ \\\\\n", Ms(k), E(k, 1), 20*log10(E(k, 1)/100), ...

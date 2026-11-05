@@ -2,7 +2,7 @@ function paprTable()
 %PAPRTABLE Our script (Step 23). For M-QAM with M = 4, 8, 16, 32, computes the PAPR (peak power over
 % average power, in dB) of the ideal constellation (all M points), of the 300 transmitted data
 % symbols, and of the received data symbols of the wired and wireless captures of Step 18
-% (output of receiverSC.m). Writes the table rows to report/tables/papr.tex.
+% (output of receiverSC.m). Writes the table rows to tables/papr.tex.
 
 root = fullfile(fileparts(mfilename("fullpath")), "..");   % Scripts_Module5
 oldDir = cd(root);
@@ -20,7 +20,7 @@ for k = 1:numel(Ms)
     fprintf("%2d-QAM: ideal %.2f dB, transmitted %.2f dB, received wired %.2f dB, wireless %.2f dB\n", M, P(k, :));
 end
 
-fid = fopen(fullfile(root, "..", "report", "tables", "papr.tex"), "w");
+fid = fopen(fullfile(root, "..", "tables", "papr.tex"), "w");
 closefile = onCleanup(@() fclose(fid));
 for k = 1:numel(Ms)
     fprintf(fid, "%d & %.2f & %.2f & %.2f & %.2f \\\\\n", Ms(k), P(k, :));

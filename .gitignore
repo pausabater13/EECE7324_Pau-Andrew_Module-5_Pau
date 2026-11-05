@@ -15,7 +15,6 @@ Laboratory Assignment 4 (Module 5).pdf
 *.fdb_latexmk
 *.synctex.gz
 /main.pdf
-report/main.pdf
 
 # macOS.
 .DS_Store
