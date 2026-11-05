@@ -404,6 +404,8 @@ function bits = symbolDemapping(symbols, M, modScheme, symOrder)
 \end{lstlisting}
 
     \item They use the same filter. The SRRC pulse is symmetric (our script \texttt{checks/correlatorLoopback.m} checks that $p$ and its time-reversed version are identical), so the matched filter, the time-reversed pulse, is the pulse itself. What changes is the order: the transmitter upsamples the symbols and then filters them with $p$, going from symbols to samples, while the receiver filters with $p$ and then keeps one sample per symbol at $T_s$, going from samples to symbols. Together, the two SRRC filters give a raised cosine, which is zero at the other sampling instants, so there is no ISI (Step 8), and the matched filter gives the highest SNR at the sampling instants. The pulse has the same shape on both sides, but with 3 samples per symbol at the SG (75 MSa/s) and 800 at the DSO (20 GSa/s).
+
+    \item Yes, they are the same. Our script \texttt{checks/compareReceivers.m} runs \texttt{receiverSC.m} on the 28 captures (M-PSK and M-QAM, wired and wireless), once with \texttt{correlationReceiver.m} and once with \texttt{matchedFilter.m}. The BER and SER are the same in all of them, and the received symbols differ by at most $2.7 \cdot 10^{-13}$ for symbols with an amplitude of about 24, i.e., about $10^{-14}$ of their size, which is only rounding. This is what we expected from Step 25: the matched filter sampled at $T_s$ computes exactly the same sum as the correlation. \missing{Rerun \texttt{checks/compareReceivers.m} with the 1.1 m captures, where there should be some errors, to check that both receivers give the same ones.}
 \end{enumerate}
 
 \begin{thebibliography}{9}
