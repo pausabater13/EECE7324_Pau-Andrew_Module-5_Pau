@@ -168,7 +168,7 @@ bitsReceived = symbolDemapping(symbolsDataReceived, M, modScheme, symOrder);
     \begin{equation}
         \hat{s}_i = \sum_{n=1}^{N_p} p[n]\, r\big[n + (i-1)L\big], \qquad i = 1, \dots, N,
     \end{equation}
-    the discrete version of $\int r(t)\, p\big(t - (i-1)T_s\big)\, dt$. With no channel, it gives back the transmitted symbols within 0.5\% (our script \texttt{checks/correlatorLoopback.m}).
+    which is not exactly the integral $\int r(t)\, p\big(t - (i-1)T_s\big)\, dt$: the sum has no time step $1/F_s$, and \texttt{rcosdesign} normalizes the pulse so that $\sum_n p[n]^2 = 1$~\cite{rcosdesign}, not $\int p(t)^2\, dt = 1$. A unit-energy pulse $p(t)$ sampled at $F_s$ has samples $\sqrt{F_s}$ times larger, so $\hat{s}_i$ is $\sqrt{F_s}$ times the integral, i.e., the code is missing a factor $1/\sqrt{F_s}$. We did not add it, because a common factor does not change the decisions: PSK only looks at the phase, and for QAM we scale the symbols before deciding (Step 19). It only changes the units of the received symbols, which are therefore arbitrary in our plots. With no channel, it gives back the transmitted symbols within 0.5\% (our script \texttt{checks/correlatorLoopback.m}).
 
     \item \texttt{pskdemod()} uses Gray by default~\cite{pskdemod}, so it only matched our Gray captures. We added \texttt{symOrder} as an optional input, as in the transmitter (\cref{lst:demap}).
 
