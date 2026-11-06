@@ -11,10 +11,10 @@ cleanup = onCleanup(@() cd(oldDir));
 
 names = ["10 cm", "1.1 m", "1.5 m", "2 m"];
 Ms = [2 4];
-files = ["captures/wireless_10cm/6b_2psk_bin.mat", "captures/wireless/6b_2psk_bin.mat", ...
-         "captures/wireless_1p5m/6b_2psk_bin_1p5m.mat", "captures/wireless_2m/6b_2psk_bin_2m.mat";
-         "captures/wireless_10cm/6b_4psk_bin.mat", "captures/wireless/6b_4psk_bin.mat", ...
-         "captures/wireless_1p5m/6b_4psk_bin_1p5m.mat", ""];
+files = ["captures/wireless_10cm/6b_2psk_bin.mat", "captures/wireless_1p1m/6b_2psk_bin.mat", ...
+         "captures/wireless/6b_2psk_bin.mat", "captures/wireless_2m/6b_2psk_bin_2m.mat";
+         "captures/wireless_10cm/6b_4psk_bin.mat", "captures/wireless_1p1m/6b_4psk_bin.mat", ...
+         "captures/wireless/6b_4psk_bin.mat", ""];
 src = fileread("receiverSC.m");
 src = regexprep(src, 'symOrder = "gray";', 'symOrder = "bin";', 'once');
 

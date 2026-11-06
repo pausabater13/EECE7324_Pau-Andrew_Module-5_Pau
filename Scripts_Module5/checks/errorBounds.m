@@ -4,7 +4,7 @@ function errorBounds()
 % errors. Only base MATLAB (betaincinv), no toolbox needed.
 
 n = 300;
-for k = [0 3 23]
+for k = [0 8 29 49 66 104 181]
     if k == 0
         lo = 0;
     else
