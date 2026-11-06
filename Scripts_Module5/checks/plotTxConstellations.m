@@ -31,21 +31,26 @@ t = tiledlayout(f, 2, numel(Ms), TileSpacing="compact", Padding="compact");
 for o = 1:2
     for k = 1:numel(Ms)
         M = Ms(k);
-        ax = nexttile(t);
-        plot(ax, real(S{o, k}), imag(S{o, k}), ".", MarkerSize=12); hold(ax, "on");
-        ref = pskmod((0:M-1).', M, 0, orders(o)); % Point of each integer value.
-        fs = max(5, 9 - log2(M));
-        for m = 0:M-1
-            p = ref(m+1) * 1.25;
-            text(ax, real(p), imag(p), dec2bin(m, log2(M)), FontSize=fs, HorizontalAlignment="center");
-        end
-        axis(ax, "equal"); grid(ax, "on"); xlim(ax, [-1.5 1.5]); ylim(ax, [-1.5 1.5]);
-        title(ax, sprintf("%d-PSK, %s", M, orders(o)));
-        xlabel(ax, "I"); ylabel(ax, "Q");
+        % pskmod draws the ideal constellation with the bits of each point.
+        pskmod(int2bit((0:M-1).', log2(M)), M, 0, orders(o), InputType="bit", PlotConstellation=true);
+        ax = flagTile(t, (o - 1)*numel(Ms) + k, M);
+        plot(ax, real(S{o, k}), imag(S{o, k}), ".", MarkerSize=10); % Generated data symbols.
     end
 end
 exportgraphics(f, figOut, ContentType="vector");
 fprintf("Saved %s\n", figOut);
+end
+
+function ax = flagTile(t, tile, M)
+% Moves the axes of the figure drawn by PlotConstellation into a tile of t.
+src = gcf;
+ax = copyobj(findobj(src, "Type", "axes"), t);
+ax.Layout.Tile = tile;
+close(src);
+set(findall(ax, "Type", "text"), FontSize=max(5, 9 - log2(M)));
+xlabel(ax, "I"); ylabel(ax, "Q");
+ax.Title.FontSize = 9;
+hold(ax, "on");
 end
 
 function s = runTx(txt)

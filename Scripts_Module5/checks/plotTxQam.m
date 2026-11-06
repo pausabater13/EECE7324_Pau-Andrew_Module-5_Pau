@@ -41,18 +41,26 @@ for k = 1:numel(Ms)
         "neighbor pairs %d, of them differing in more than one bit %d\n", M, ...
         mean(abs(ref).^2), dmin, 2*sin(pi/M), nnz(triu(nb)), bad);
 
-    ax = nexttile(t);
-    plot(ax, real(S{k}), imag(S{k}), ".", MarkerSize=12); hold(ax, "on");
-    lim = 1.25 * max(abs([real(ref); imag(ref)]));
-    for m = 0:M-1
-        text(ax, real(ref(m+1)), imag(ref(m+1)) + 0.09*lim, dec2bin(m, log2(M)), ...
-            FontSize=max(5, 9 - log2(M)), HorizontalAlignment="center");
-    end
-    axis(ax, "equal"); grid(ax, "on"); xlim(ax, [-lim lim]); ylim(ax, [-lim lim]);
-    title(ax, sprintf("%d-QAM, gray", M)); xlabel(ax, "I"); ylabel(ax, "Q");
+    % qammod draws the ideal constellation with the bits of each point.
+    qammod(int2bit((0:M-1).', log2(M)), M, "gray", InputType="bit", UnitAveragePower=true, PlotConstellation=true);
+    ax = flagTile(t, k, M);
+    title(ax, sprintf("%d-QAM, Gray", M));                  % Shorter than the one of qammod.
+    plot(ax, real(S{k}), imag(S{k}), ".", MarkerSize=10); % Generated data symbols.
 end
 exportgraphics(f, figOut, ContentType="vector");
 fprintf("Saved %s\n", figOut);
+end
+
+function ax = flagTile(t, tile, M)
+% Moves the axes of the figure drawn by PlotConstellation into a tile of t.
+src = gcf;
+ax = copyobj(findobj(src, "Type", "axes"), t);
+ax.Layout.Tile = tile;
+close(src);
+set(findall(ax, "Type", "text"), FontSize=max(5, 9 - log2(M)));
+xlabel(ax, "I"); ylabel(ax, "Q");
+ax.Title.FontSize = 9;
+hold(ax, "on");
 end
 
 function s = runTx(txt)
