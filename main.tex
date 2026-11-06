@@ -195,6 +195,29 @@ function bits = symbolDemapping(symbols, M, modScheme, symOrder)
 
     Our script \texttt{checks/pskTable.m} computes all of it (\cref{tab:psk-gray,tab:psk-bin}). The wired SNR is 54 dB for every $M$, with no errors. Over the air, at 1.5 m, the SNR is 40 to 44 dB, and 16-PSK and 32-PSK have errors: an SER of 16\% and 60\% with Gray coding, and 22\% and 35\% without. With 40 dB of SNR, these errors do not come from the noise we measure here, but from distortion and multipath, which this SNR does not see (Step 14).
 
+    \textbf{Where we measure.} All the powers and SNRs above are measured in passband, on the DSO trace, before the receiver does anything. They could also be measured at two other points of the receiver, and our script \texttt{checks/powerDomains.m} does it for 16-PSK with Gray coding (\cref{tab:power-domains}):
+    \begin{itemize}
+        \item In baseband, after \texttt{iqDemodulation.m}: because of the factor 2 in it, $|r|$ is the passband amplitude, so $P = \overline{|r|^2}/(2R)$, with $R = 50~\Omega$. The noise cannot be separated here, because the low-pass filter removes the empty part of the spectrum; we would need a capture with the SG off, which we did not take.
+        \item At symbol level, after the correlation receiver: $E_s = \overline{|\hat{s}_i|^2}/F_s$ (the factor $1/\sqrt{F_s}$ of Step 8, squared) and $P = E_s R_s/(2R)$. Here the SNR is $E_s/N_0 \approx 1/\text{EVM}^2$ (Step 14), which counts everything that moves the symbols away from the ideal points, not only the noise.
+    \end{itemize}
+    The power is the same at the three points, within 0.4 dB, but the SNR is not. With the cable, the spectrum gives $E_s/N_0 = 57$ dB ($\text{SNR} + 2.4$ dB) and the symbols 35 dB; at 1.5 m, 45 dB and 15 dB. The difference is the distortion and multipath, which the spectrum counts as signal. The symbol-level value is the one that predicts the errors: for 16-PSK at 1.5 m, $E_s/N_0 = 14.7$ dB gives an SER of 14\% in AWGN, close to the 16\% we measured, while 45 dB would give no errors at all.
+
+    \begin{table}[H]
+        \centering
+        \small
+        \begin{tabular}{l|ccc|cc}
+            \hline
+            \multirow{2}{*}{16-PSK Gray} & \multicolumn{3}{c|}{Received power (dBm)} & \multicolumn{2}{c}{$E_s/N_0$ (dB)} \\
+             & Passband & Baseband & Symbols & Spectrum & $1/\text{EVM}^2$ \\
+            \hline
+            Wired & 8.2 & 8.2 & 8.5 & 56.8 & 34.8 \\
+            Wireless, 1.5 m & $-37.7$ & $-37.8$ & $-37.4$ & 45.3 & 14.7 \\
+            \hline
+        \end{tabular}
+        \caption{Received power and $E_s/N_0$ measured at three points of the receiver (\texttt{checks/powerDomains.m}).}
+        \label{tab:power-domains}
+    \end{table}
+
     \begin{table}[H]
         \centering
         \small
