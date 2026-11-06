@@ -250,7 +250,7 @@ function bits = symbolDemapping(symbols, M, modScheme, symOrder)
     \end{itemize}
     Amplitude errors move the points across the circle and do not change the decision for PSK. The 10 cm captures are also shown for comparison.
 
-    To see the effect of distance, we also captured 2-PSK without Gray coding at 2 m (\cref{fig:rx-2psk-distance}, from our script \texttt{checks/plotDistance.m}). The EVM goes from 7\% at 10 cm and 10\% at 1.1 m to 74\% at 2 m: each cluster splits into two, above and below the I axis, and each half becomes a ring. The split probably comes from multipath, with an echo that depends on the neighboring symbol, and the rings from a signal that rotates with respect to ours, such as an interferer or a small frequency offset, but we did not check it. There are still no errors, because 2-PSK only looks at the sign of I and all the symbols stay on their side; with more points per circle, these symbols would be wrong.
+    To see the effect of distance, we also captured 2-PSK and 4-PSK without Gray coding at 1.5 m, and 2-PSK at 2 m (\cref{fig:rx-2psk-distance}, from our script \texttt{checks/plotDistance.m}). For 2-PSK, the EVM goes from 7\% at 10 cm and 10\% at 1.1 m to 16\% at 1.5 m, and for 4-PSK from 6--9\% to 19\% at 1.5 m: the clouds grow, but there are still no errors. At 2 m the EVM jumps to 74\%: each cluster splits into two, above and below the I axis, and each half becomes a ring. The split probably comes from multipath, with an echo that depends on the neighboring symbol, and the rings from a signal that rotates with respect to ours, such as an interferer or a small frequency offset, but we did not check it. There are still no errors, because 2-PSK only looks at the sign of I and all the symbols stay on their side; with more points per circle, these symbols would be wrong.
 
     \begin{figure}[H]
         \centering
@@ -267,8 +267,8 @@ function bits = symbolDemapping(symbols, M, modScheme, symOrder)
 
     \begin{figure}[H]
         \centering
-        \fig{\linewidth}{figures/rx_2psk_distance.pdf}
-        \caption{Received 2-PSK constellations without Gray coding at 10 cm, 1.1 m and 2 m (blue), with the ideal points (red) and the decision boundary (dashed).}
+        \fig{0.72\linewidth}{figures/rx_2psk_distance.pdf}
+        \caption{Received 2-PSK (top) and 4-PSK (bottom) constellations without Gray coding at 10 cm, 1.1 m, 1.5 m and 2 m (blue), with the ideal points (red). There is no 4-PSK capture at 2 m.}
         \label{fig:rx-2psk-distance}
     \end{figure}
 
