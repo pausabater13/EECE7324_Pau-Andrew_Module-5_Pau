@@ -26,6 +26,10 @@ for o = ["gray", "bin"]
         M = Ms(k);
         for s = 1:2
             f = sprintf("captures/%s/%s_%dpsk_%s.mat", sets(s, 1), sets(s, 2), M, o);
+            if ~isfile(f)                        % Capture missing: "--" in the table.
+                R(k, [s, 2+s, 4+s, 6+s]) = NaN;
+                continue
+            end
             snr = estimateSNR(f, fc, B);
             [ber, ser] = runRx(src, M, o, f);
             R(k, s)     = 10*log10(snr);
@@ -89,14 +93,20 @@ function writeTable(file, Ms, R)
 fid = fopen(file, "w");
 cleanup = onCleanup(@() fclose(fid));
 for k = 1:numel(Ms)
-    fprintf(fid, "%d & %.1f & %.1f & %.1f & %.1f & %s & %s & %s & %s \\\\\n", Ms(k), R(k, 1:4), ...
-        num(R(k, 5)), num(R(k, 6)), num(R(k, 7)), num(R(k, 8)));
+    fprintf(fid, "%d & %s & %s & %s & %s & %s & %s & %s & %s \\\\\n", Ms(k), db(R(k, 1)), db(R(k, 2)), ...
+        db(R(k, 3)), db(R(k, 4)), num(R(k, 5)), num(R(k, 6)), num(R(k, 7)), num(R(k, 8)));
 end
 fprintf(fid, "\\hline%%"); % Here, since LaTeX does not accept \hline right after \input.
 end
 
+function s = db(x)
+if isnan(x), s = "--"; else, s = sprintf("%.1f", x); end
+end
+
 function s = num(x)
-if x == 0
+if isnan(x)
+    s = "--";
+elseif x == 0
     s = "0";
 else
     s = sprintf("$%.1f \\cdot 10^{%d}$", x / 10^floor(log10(x)), floor(log10(x)));

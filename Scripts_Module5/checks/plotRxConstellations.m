@@ -12,8 +12,8 @@ cleanup = onCleanup(@() cd(oldDir));
 
 src = fileread("receiverSC.m");
 Ms = [2 4 8 16 32];
-sets = ["wired", "6a"; "wireless", "6b"];
-for s = 1:2
+sets = ["wired", "6a"; "wireless", "6b"; "wireless_10cm", "6b"]; % 10 cm: earlier captures, for comparison.
+for s = 1:size(sets, 1)
     % Run the receiver first: it closes all figures when it starts.
     Y = cell(1, numel(Ms)); X = Y; PHI = zeros(1, numel(Ms));
     for k = 1:numel(Ms)

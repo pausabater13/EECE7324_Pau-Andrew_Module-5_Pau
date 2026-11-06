@@ -14,6 +14,7 @@ for s = 1:2
     for o = ["gray", "bin"]
         for M = [2 4 8 16 32]
             f = sprintf("captures/%s/%s_%dpsk_%s.mat", sets(s, 1), sets(s, 2), M, o);
+            if ~isfile(f), fprintf("%-36s missing\n", f); continue; end
             [ber, ser, fsFile] = runOne(src, M, o, f);
             wrong = "gray"; if o == "gray", wrong = "bin"; end
             berWrong = runOne(src, M, wrong, f);
