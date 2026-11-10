@@ -18,7 +18,7 @@
 \usetikzlibrary{arrows.meta, patterns}
 
 \usepackage[margin=1in]{geometry}
-\emergencystretch=2em % Lets long \texttt names wrap instead of overflowing the margin
+\emergencystretch=4em % Lets long \texttt names wrap instead of overflowing the margin
 
 % Items still missing before submission are highlighted in red
 \newcommand{\missing}[1]{\textcolor{red}{[MISSING: #1]}}
@@ -126,18 +126,14 @@ function symbols = symbolMapping(bits, M, modScheme, symOrder)
 
     \item As in Module 4, we set the SG to 2.4 GHz and 10 dBm, with Dual Arb ON at 75 MHz. On the DSO (Channel 1, 50 $\Omega$, DC coupling) we used 4 $\mu$s/div to look at the signal: the screen shows 40 $\mu$s, more than two frames of 16.32 $\mu$s, with three short dips per frame at the boundaries between header, pilot and data (\cref{fig:dso-psk}). We checked the spectrum with an FFT at 2.4 GHz and saved $10^6$ samples at 20 GSa/s (50 $\mu$s, enough for two complete frames). \textcolor{red}{The saved samples do not depend on the timebase, only on the sample rate and the number of points: our wired captures were saved at 10 ns/div and still have 50 $\mu$s at 20 GSa/s, which our script \texttt{checks/capturePower.m} checks for every file.} All the parameters of Steps 10 to 14 are computed from these files, not from the screen.
     \begin{enumerate}[label=\alph*)]
-        \item Wired: a coaxial cable from the SG RF Out to Channel 1. For this case we expect a high SNR and no errors.
-
-        % coaxial cable from the SG RF Out to Channel 1, at 500 mV/div. The received power is about 8 dBm in the signal band (our script checks/capturePower.m), so we do not expect errors.
-        \item Wireless: one antenna on the SG and one on Channel 1, pointing the same way (\cref{fig:setup-wireless}). In Module 4 the errors started at about 114 cm, so we first tried 1.1 m, where only 32-PSK had a few errors, and then 1.5 m, which is the set we use below. 
-        
-        %We did not write down the vertical scale; \texttt{checks/capturePower.m} estimates about 7 mV/div for all the captures. At 1.5 m the received power is about $-38$ dBm ($-36.4$ to $-40.3$ dBm), 46 dB less than with the cable.
+        \item Wired: a coaxial cable from the SG RF Out to Channel 1, at 500 mV/div. The received power is about 8 dBm in the signal band (our script \texttt{checks/capturePower.m}), so for this case we expect a high SNR and no errors.
+        \item Wireless: one antenna on the SG and one on Channel 1, pointing the same way (\cref{fig:setup-wireless}). In Module 4 the errors started at about 114 cm, so we first tried 1.1 m, where only 32-PSK had a few errors, and then 1.5 m, which is the set we use below. We did not write down the vertical scale; \texttt{checks/capturePower.m} estimates about 7 mV/div. At 1.5 m the received power is about $-38$ dBm, 46 dB less than with the cable.
     \end{enumerate}
 
     \begin{figure}[H]
         \centering
         \fig{\linewidth}{figures-empty/A/wirelesssetup.JPG}
-        \caption{Wireless setup: SG with one antenna on its RF Out, and the second antenna connected to Channel 1 of the DSO.}
+        \caption{Wireless setup at 1.5 m: SG with one antenna on its RF Out, and the second antenna connected to Channel 1 of the DSO.}
         \label{fig:setup-wireless}
     \end{figure}
 
@@ -205,7 +201,7 @@ function bits = symbolDemapping(symbols, M, modScheme, symOrder)
         \item In baseband, after \texttt{iqDemodulation.m}: because of the factor 2 in it, $|r|$ is the passband amplitude, so $P = \overline{|r|^2}/(2R)$, with $R = 50~\Omega$. The noise cannot be separated here, because the low-pass filter removes the empty part of the spectrum; we would need a capture with the SG off, which we did not take.
         \item At symbol level, after the correlation receiver: $E_s = \overline{|\hat{s}_i|^2}/F_s$ (the factor $1/\sqrt{F_s}$ of Step 8, squared) and $P = E_s R_s/(2R)$. Here the SNR is $E_s/N_0 \approx 1/\text{EVM}^2$ (Step 14), which counts everything that moves the symbols away from the ideal points, not only the noise.
     \end{itemize}
-    The power is the same at the three points, within 0.4 dB, but the SNR is not. With the cable, the spectrum gives $E_s/N_0 = 57$ dB ($\text{SNR} + 2.4$ dB) and the symbols 35 dB; at 1.5 m, 45 dB and 15 dB. The difference is the distortion and multipath, which the spectrum counts as signal. The symbol-level value is the one that predicts the errors: for 16-PSK at 1.5 m, $E_s/N_0 = 14.7$ dB gives an SER of 14\% in AWGN, close to the 16\% we measured, while 45 dB would give no errors at all.
+    The power is the same at the three points, within 0.4 dB, but the SNR is not. With the cable, the spectrum gives $E_s/N_0 = 57$ dB ($\text{SNR} + 2.4$ dB) and the symbols 35 dB; at 1.5 m, 45 dB and 15 dB. The difference is the distortion and multipath, which the spectrum counts as signal. The symbol-level value is the one that predicts the errors: for 16-PSK at 1.5 m, $E_s/N_0 = 14.7$ dB gives an SER of 13\% in AWGN, close to the 16\% we measured, while 45 dB would give no errors at all.
 
     \begin{table}[H]
         \centering
@@ -268,17 +264,18 @@ function bits = symbolDemapping(symbols, M, modScheme, symOrder)
     \end{itemize}
     Over the air, 16-PSK, 32-PSK, 16-QAM and 32-QAM had errors, from 8 to 181 out of 300 symbols. Even then, 300 symbols give only a rough estimate: with 95\% confidence, for example, the SER of 16-PSK with Gray coding (49 errors) is between 12 and 21\%, and the one of 32-QAM (8 errors) between 1.2 and 5.2\% (our script \texttt{checks/errorBounds.m}).
 
-    \item A bit error happens when a received symbol crosses into the region of a neighbor, thus correct bits are defined by how far the symbols are from decision boundaries (\cref{fig:rx-psk}, \textcolor{red}{made with our script \texttt{checks/plotRxConstellations.m}}):
+    \item A bit error happens when a received symbol crosses into the region of a neighbor, so what matters is how far the symbols are from the decision boundaries (\cref{fig:rx-psk}, \textcolor{red}{made with our script \texttt{checks/plotRxConstellations.m}}):
     \begin{itemize}
-        \item \textbf{Noise and interference} cause the received captures to become a ``cloud" (dispersed points around the true symbol point). Depending on the channel (wired or over the air), the cloud can be tight around the central point or more spread.
+        \item \textbf{Noise and interference} turn the received symbols into a ``cloud'' (dispersed points around the true symbol point). Depending on the channel (wired or over the air), the cloud can be tight around the central point or more spread.
         \item \textbf{Phase errors} rotate the points along the circle, which is what matters for PSK. The receiver corrects a static phase from the header; a frequency offset, like the one in Module 4, would rotate the whole constellation.
         \item \textbf{Multipath} without an equalizer also spreads the clouds.
         \item \textbf{The modulation order}: the same cloud is closer to the boundaries when the slices are narrower. Over the air, at 1.5 m, the phase spread fills 6\% of the half-slice of 2-PSK, 67\% of the one of 16-PSK and more than all of the one of 32-PSK (152\%), which is why only 16-PSK and 32-PSK have errors (Step 10).
         \item \textbf{The mapping}: with Gray coding an error to a neighbor costs only one bit.
     \end{itemize}
-    Amplitude errors move the points across the circle and do not change the decision for PSK. The 1.1 m and 10 cm captures are also shown for comparison.
+    Amplitude errors move the points off the circle (radially) and do not change the decision for PSK. The 1.1 m and 10 cm captures are also shown for comparison.
 
     \hl{update for final results}
+
     \textcolor{red}{To see the effect of distance, \cref{fig:rx-2psk-distance} (from our script \texttt{checks/plotDistance.m}) compares 2-PSK and 4-PSK without Gray coding at 10 cm, 1.1 m and 1.5 m, and 2-PSK at 2 m. For 2-PSK, the EVM goes from 7\% at 10 cm and 10\% at 1.1 m to 16\% at 1.5 m, and for 4-PSK from 6--9\% to 19\%: the clouds grow, but there are still no errors. At 2 m the EVM jumps to 74\%: each cluster splits into two, above and below the I axis, and each half becomes a ring. The split probably comes from multipath, with an echo that depends on the neighboring symbol, and the rings from a signal that rotates with respect to ours, such as an interferer or a small frequency offset, but we did not check it. There are still no errors, because 2-PSK only looks at the sign of I and all the symbols stay on their side; with more points per circle, these symbols would be wrong.}
 
     \begin{figure}[H]
@@ -312,7 +309,7 @@ function bits = symbolDemapping(symbols, M, modScheme, symOrder)
     \end{equation}
     Unlike the SER and BER, it does not need errors to happen, and it includes everything that moves the symbols: noise, phase errors, ISI and distortion.
 
-    We computed it with our script \texttt{checks/evmTable.m}, after multiplying the received symbols by one real factor so that they have the same average power as the transmitted ones (\cref{tab:evm}); it gives the same values as \texttt{comm.EVM}~\cite{commevm}. With the cable the EVM is about 2\% ($-34$ dB), and over the air, at 1.5 m, 11 to 21\%. If there were only noise, the EVM would be $1/\sqrt{\text{SNR}}$, i.e., 0.2\% at the 54 dB of Step 10, so most of the 2\% must come from something other than that noise, probably the distortion that shows up as shoulders in \cref{fig:psd}. Over the air, 16-PSK and 32-PSK have the largest EVM, 19\% and 21\%, and they are the ones with errors.
+    We computed it with our script \texttt{checks/evmTable.m}, after multiplying the received symbols by one real factor so that they have the same average power as the transmitted ones (\cref{tab:evm}); it gives the same values as \texttt{comm.EVM}~\cite{commevm}. With the cable the EVM is about 2\% ($-34$ dB), and over the air, at 1.5 m, 11 to 21\%. If there were only noise, the EVM would be $1/\sqrt{E_s/N_0}$, i.e., 0.14\% at the 57 dB of Step 10, so most of the 2\% must come from something other than that noise, probably the distortion that shows up as shoulders in \cref{fig:psd}. Over the air, 16-PSK and 32-PSK have the largest EVM, 19\% and 21\%, and they are the ones with errors.
 
     \begin{table}[H]
         \centering
@@ -360,7 +357,7 @@ function bits = symbolDemapping(symbols, M, modScheme, symOrder)
     \item We repeated Step 6 with the four M-QAM files, with the same SG settings and DSO setup.
     \begin{enumerate}[label=\alph*)]
         \item Wired: the captures are \texttt{wired/18a\_$M$qam\_gray.mat}. We did not write down the vertical scale; from the voltage step of the samples, our script \texttt{checks/capturePower.m} estimates about 420 mV/div. The power in the signal band is 8.1 dBm, the same as for M-PSK, but the peaks are higher (about 3.0 V peak to peak against 2.5 V), because QAM uses several amplitudes and the SG keeps the same average power. \missing{Screenshot of wired 16-QAM at 4 $\mu$s/div.}
-        \item Wireless: the same setup as in Step 6b, at 1.5 m, with the captures \texttt{wireless/18b\_$M$qam\_gray.mat}, at about 7 mV/div. The received power is $-36.4$ to $-39.1$ dBm. \missing{Screenshot of wireless 16-QAM at 4 $\mu$s/div.}
+        \item Wireless: the same setup as in Step 6b, at 1.5 m, with the captures \texttt{wireless/\allowbreak 18b\_$M$qam\_gray.mat}, at about 7 mV/div. The received power is $-36.4$ to $-39.1$ dBm. \missing{Screenshot of wireless 16-QAM at 4 $\mu$s/div.}
     \end{enumerate}
 \end{enumerate}
 
@@ -378,7 +375,7 @@ function bits = symbolDemapping(symbols, M, modScheme, symOrder)
 \end{lstlisting}
     \end{enumerate}
 
-    \item \Cref{fig:rx-qam} shows the received symbols as they come out of the receiver, without normalizing I or Q, made with our script \texttt{checks/plotRxQam.m}. The red crosses are the ideal points scaled by the RMS value of the received symbols. With the cable, the constellations have the shapes of \cref{fig:tx-qam}, with tight clusters (EVM of 1 to 2\%) and no rotation, so the phase correction from the BPSK header also works for QAM. Over the air, at 1.5 m, the points are about 200 times smaller (46 dB, like the received power) and the clusters much larger (EVM of 14 to 24\%). In 16-QAM and 32-QAM some symbols cross to the region of a neighbor, so there are errors (Step 21). The 1.1 m and 10 cm captures are also shown for comparison. In the wired 16-QAM, the outer points are slightly outside the red crosses: the RMS scaling is a bit off because our 300 data symbols have an average power of 0.94 instead of 1 (Step 15).
+    \item \Cref{fig:rx-qam} shows the received symbols as they come out of the receiver, without normalizing I or Q, made with our script \texttt{checks/plotRxQam.m}. The red crosses are the ideal points scaled by the RMS value of the received symbols. With the cable, the constellations have the shapes of \cref{fig:tx-qam}, with tight clusters (EVM of 1 to 2\%) and no rotation, so the phase correction from the BPSK header also works for QAM. Over the air, at 1.5 m, the points are about 200 times smaller (46 dB, like the received power) and the clusters much larger (EVM of 14 to 24\%). In 16-QAM and 32-QAM some symbols cross to the region of a neighbor, so there are errors (Step 21). The 1.1 m and 10 cm captures are also shown for comparison. In the wired 16-QAM, the outer points are slightly outside the red crosses: the RMS scaling is a bit off because our 300 data symbols have an average power of 0.94 instead of 1 (our script \texttt{checks/qamPower.m}).
 
     \begin{figure}[H]
         \centering
@@ -453,7 +450,7 @@ function bits = symbolDemapping(symbols, M, modScheme, symOrder)
         symbols(iSymbol) = conv(ySymbol, fliplr(pulse).', "valid"); % Matched filter h[n] = p[Np - n + 1], sampled at Ts.
 \end{lstlisting}
 
-    \item They use the same filter. The SRRC pulse is symmetric (our script \texttt{checks/correlatorLoopback.m} checks that $p$ and its time-reversed version are identical), so the matched filter, the time-reversed pulse, is the pulse itself. What changes is the order: the transmitter upsamples the symbols and then filters them with $p$, going from symbols to samples, while the receiver filters with $p$ and then keeps one sample per symbol at $T_s$, going from samples to symbols. Together, the two SRRC filters give a raised cosine, which is zero at the other sampling instants, so there is no ISI (Step 8), and the matched filter gives the highest SNR at the sampling instants. The pulse has the same shape on both sides, but with 3 samples per symbol at the SG (75 MSa/s) and 800 at the DSO (20 GSa/s).
+    \item They use the same filter. The SRRC pulse is symmetric (our script \texttt{checks/\allowbreak correlatorLoopback.m} checks that $p$ and its time-reversed version are identical), so the matched filter, the time-reversed pulse, is the pulse itself. What changes is the order: the transmitter upsamples the symbols and then filters them with $p$, going from symbols to samples, while the receiver filters with $p$ and then keeps one sample per symbol at $T_s$, going from samples to symbols. Together, the two SRRC filters give a raised cosine, which is zero at the other sampling instants, so there is no ISI, and the matched filter gives the highest SNR at the sampling instants. The pulse has the same shape on both sides, but with 3 samples per symbol at the SG (75 MSa/s) and 800 at the DSO (20 GSa/s).
 
     \item Yes, they are the same. Our script \texttt{checks/compareReceivers.m} runs \texttt{receiverSC.m} on the 28 captures (M-PSK and M-QAM, wired and wireless at 1.5 m), once with \texttt{correlationReceiver.m} and once with \texttt{matchedFilter.m}. The BER and SER are the same in all of them, and the received symbols differ by at most $2.7 \cdot 10^{-13}$ for symbols with an amplitude of about 24, i.e., about $10^{-14}$ of their size, which is only rounding. Both receivers also make exactly the same errors in the six captures over the air that have errors. This is what we expected from Step 25: the matched filter sampled at $T_s$ computes exactly the same sum as the correlation.
 \end{enumerate}
