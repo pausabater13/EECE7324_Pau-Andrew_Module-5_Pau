@@ -112,7 +112,7 @@ function symbols = symbolMapping(bits, M, modScheme, symOrder)
         \begin{enumerate}[label=\roman*.]
             \item The points get closer together: they are $360^\circ/M$ apart, only $11.25^\circ$ for 32-PSK.
             \item Yes. With the same power, less noise or phase error is enough to move a symbol to its neighbor: for 32-PSK, $5.6^\circ$ is already a wrong symbol.
-            \item More SNR (more power or a shorter distance), a lower $M$ when the channel is bad, or QAM, which also uses the amplitude and spreads the points over the whole I/Q plane (Part B).
+            \item Higher SNR (more power or a shorter distance), a lower $M$ when the channel is bad, or QAM, which also uses the amplitude and spreads the points over the whole I/Q plane (Part B).
         \end{enumerate}
     \end{enumerate}
 
@@ -123,15 +123,19 @@ function symbols = symbolMapping(bits, M, modScheme, symOrder)
         \label{fig:tx-psk}
     \end{figure}
 
-    \item As in Module 4, the SG was at 2.4 GHz and 10 dBm, with Dual Arb ON at 75 MHz. On the DSO (Channel 1, 50 $\Omega$, DC coupling) we used 4 $\mu$s/div to look at the signal: the screen shows 40 $\mu$s, more than two frames of 16.32 $\mu$s, with three short dips per frame at the boundaries between header, pilot and data (\cref{fig:dso-psk}). We checked the spectrum with an FFT at 2.4 GHz and saved $10^6$ samples at 20 GSa/s (50 $\mu$s, enough for two complete frames). The saved samples do not depend on the timebase, only on the sample rate and the number of points: our wired captures were saved at 10 ns/div and still have 50 $\mu$s at 20 GSa/s, which our script \texttt{checks/capturePower.m} checks for every file. All the parameters of Steps 10 to 14 are computed from these files, not from the screen.
+    \item As in Module 4, we set the SG to 2.4 GHz and 10 dBm, with Dual Arb ON at 75 MHz. On the DSO (Channel 1, 50 $\Omega$, DC coupling) we used 4 $\mu$s/div to look at the signal: the screen shows 40 $\mu$s, more than two frames of 16.32 $\mu$s, with three short dips per frame at the boundaries between header, pilot and data (\cref{fig:dso-psk}). We checked the spectrum with an FFT at 2.4 GHz and saved $10^6$ samples at 20 GSa/s (50 $\mu$s, enough for two complete frames). \textcolor{red}{The saved samples do not depend on the timebase, only on the sample rate and the number of points: our wired captures were saved at 10 ns/div and still have 50 $\mu$s at 20 GSa/s, which our script \texttt{checks/capturePower.m} checks for every file.} All the parameters of Steps 10 to 14 are computed from these files, not from the screen.
     \begin{enumerate}[label=\alph*)]
-        \item Wired: a coaxial cable from the SG RF Out to Channel 1, at 500 mV/div. The received power is about 8 dBm in the signal band (our script \texttt{checks/capturePower.m}), so we do not expect errors.
-        \item Wireless: one antenna on the SG and one on Channel 1, pointing the same way (\cref{fig:setup-wireless}). In Module 4 the errors started at about 114 cm, so we first tried 1.1 m, where only 32-PSK had a few errors, and then 1.5 m, which is the set we use below. We did not write down the vertical scale; \texttt{checks/capturePower.m} estimates about 7 mV/div for all the captures. At 1.5 m the received power is about $-38$ dBm ($-36.4$ to $-40.3$ dBm), 46 dB less than with the cable.
+        \item Wired: a coaxial cable from the SG RF Out to Channel 1. For this case we expect a high SNR and no errors.
+
+        % coaxial cable from the SG RF Out to Channel 1, at 500 mV/div. The received power is about 8 dBm in the signal band (our script checks/capturePower.m), so we do not expect errors.
+        \item Wireless: one antenna on the SG and one on Channel 1, pointing the same way (\cref{fig:setup-wireless}). In Module 4 the errors started at about 114 cm, so we first tried 1.1 m, where only 32-PSK had a few errors, and then 1.5 m, which is the set we use below. 
+        
+        %We did not write down the vertical scale; \texttt{checks/capturePower.m} estimates about 7 mV/div for all the captures. At 1.5 m the received power is about $-38$ dBm ($-36.4$ to $-40.3$ dBm), 46 dB less than with the cable.
     \end{enumerate}
 
     \begin{figure}[H]
         \centering
-        \missingfig{0.7\linewidth}{the wireless setup at $\approx 1.1$ m, with the tape measure}
+        \fig{\linewidth}{figures-empty/A/wirelesssetup.jpg}
         \caption{Wireless setup: SG with one antenna on its RF Out, and the second antenna connected to Channel 1 of the DSO.}
         \label{fig:setup-wireless}
     \end{figure}
@@ -148,7 +152,7 @@ function symbols = symbolMapping(bits, M, modScheme, symOrder)
 
 \subsection*{Receiver}
 \begin{enumerate}[resume]
-    \item We set \texttt{M}, \texttt{modScheme} and \texttt{symOrder} to the values of each capture and passed \texttt{symOrder} on to \texttt{symbolMapping()} and \texttt{symbolDemapping()} (\cref{lst:rx}). The rest already matched: 25 MBd, 60 pilot and 300 data symbols, and the same bits and header. The sampling frequency is different on purpose: 20 GSa/s, the one of the DSO (800 samples per symbol). Our script \texttt{checks/runReceiverAll.m} checks that all the captures are at 20 GSa/s and decode with no errors.
+    \item We set \texttt{M}, \texttt{modScheme} and \texttt{symOrder} to the values of each capture and passed \texttt{symOrder} on to \texttt{symbolMapping()} and \texttt{symbolDemapping()} (\cref{lst:rx}). The rest already matched: 25 MBd, 60 pilot and 300 data symbols, and the same bits and header. The sampling frequency is different on purpose: 20 GSa/s, the one of the DSO (800 samples per symbol). \textcolor{red}{Our script \texttt{checks/runReceiverAll.m} checks that all the captures are at 20 GSa/s and decode with no errors.}
 
 \begin{lstlisting}[caption={Our changes to \texttt{receiverSC.m}.}, label={lst:rx}]
 M = 2;             % Modulation order.
@@ -193,7 +197,7 @@ function bits = symbolDemapping(symbols, M, modScheme, symOrder)
 
     \textbf{SER and BER} come from \texttt{receiverSC.m} (one frame: 300 symbols).
 
-    Our script \texttt{checks/pskTable.m} computes all of it (\cref{tab:psk-gray,tab:psk-bin}). The wired SNR is 54 dB for every $M$, with no errors. Over the air, at 1.5 m, the SNR is 40 to 44 dB, and 16-PSK and 32-PSK have errors: an SER of 16\% and 60\% with Gray coding, and 22\% and 35\% without. With 40 dB of SNR, these errors do not come from the noise we measure here, but from distortion and multipath, which this SNR does not see (Step 14).
+    \textcolor{red}{Our script \texttt{checks/pskTable.m} computes all of it (\cref{tab:psk-gray,tab:psk-bin}). The wired SNR is 54 dB for every $M$, with no errors. Over the air, at 1.5 m, the SNR is 40 to 44 dB, and 16-PSK and 32-PSK have errors: an SER of 16\% and 60\% with Gray coding, and 22\% and 35\% without.} With 40 dB of SNR, these errors do not come from the noise we measure here, but from distortion and multipath, which this SNR does not see (Step 14).
 
     \begin{table}[H]
         \centering
@@ -240,17 +244,18 @@ function bits = symbolDemapping(symbols, M, modScheme, symOrder)
     \end{itemize}
     Over the air, 16-PSK, 32-PSK, 16-QAM and 32-QAM had errors, from 8 to 181 out of 300 symbols. Even then, 300 symbols give only a rough estimate: with 95\% confidence, for example, the SER of 16-PSK with Gray coding (49 errors) is between 12 and 21\%, and the one of 32-QAM (8 errors) between 1.2 and 5.2\% (our script \texttt{checks/errorBounds.m}).
 
-    \item A bit error happens when a received symbol crosses into the slice of a neighbor, so what matters is how far the symbols are from the slice boundaries (\cref{fig:rx-psk}, made with our script \texttt{checks/plotRxConstellations.m}):
+    \item A bit error happens when a received symbol crosses into the region of a neighbor, thus correct bits are defined by how far the symbols are from decision boundaries (\cref{fig:rx-psk}, \textcolor{red}{made with our script \texttt{checks/plotRxConstellations.m}}):
     \begin{itemize}
-        \item \textbf{Noise and interference} turn each point into a cloud; over the air the clouds are clearly bigger than with the cable.
+        \item \textbf{Noise and interference} cause the received captures to become a ``cloud" (dispersed points around the true symbol point). Depending on the channel (wired or over the air), the cloud can be tight around the central point or more spread.
         \item \textbf{Phase errors} rotate the points along the circle, which is what matters for PSK. The receiver corrects a static phase from the header; a frequency offset, like the one in Module 4, would rotate the whole constellation.
-        \item \textbf{Multipath (ISI)} without an equalizer also spreads the clouds.
+        \item \textbf{Multipath} without an equalizer also spreads the clouds.
         \item \textbf{The modulation order}: the same cloud is closer to the boundaries when the slices are narrower. Over the air, at 1.5 m, the phase spread fills 6\% of the half-slice of 2-PSK, 67\% of the one of 16-PSK and more than all of the one of 32-PSK (152\%), which is why only 16-PSK and 32-PSK have errors (Step 10).
         \item \textbf{The mapping}: with Gray coding an error to a neighbor costs only one bit.
     \end{itemize}
     Amplitude errors move the points across the circle and do not change the decision for PSK. The 1.1 m and 10 cm captures are also shown for comparison.
 
-    To see the effect of distance, \cref{fig:rx-2psk-distance} (from our script \texttt{checks/plotDistance.m}) compares 2-PSK and 4-PSK without Gray coding at 10 cm, 1.1 m and 1.5 m, and 2-PSK at 2 m. For 2-PSK, the EVM goes from 7\% at 10 cm and 10\% at 1.1 m to 16\% at 1.5 m, and for 4-PSK from 6--9\% to 19\%: the clouds grow, but there are still no errors. At 2 m the EVM jumps to 74\%: each cluster splits into two, above and below the I axis, and each half becomes a ring. The split probably comes from multipath, with an echo that depends on the neighboring symbol, and the rings from a signal that rotates with respect to ours, such as an interferer or a small frequency offset, but we did not check it. There are still no errors, because 2-PSK only looks at the sign of I and all the symbols stay on their side; with more points per circle, these symbols would be wrong.
+    \hl{update for final results}
+    \textcolor{red}{To see the effect of distance, \cref{fig:rx-2psk-distance} (from our script \texttt{checks/plotDistance.m}) compares 2-PSK and 4-PSK without Gray coding at 10 cm, 1.1 m and 1.5 m, and 2-PSK at 2 m. For 2-PSK, the EVM goes from 7\% at 10 cm and 10\% at 1.1 m to 16\% at 1.5 m, and for 4-PSK from 6--9\% to 19\%: the clouds grow, but there are still no errors. At 2 m the EVM jumps to 74\%: each cluster splits into two, above and below the I axis, and each half becomes a ring. The split probably comes from multipath, with an echo that depends on the neighboring symbol, and the rings from a signal that rotates with respect to ours, such as an interferer or a small frequency offset, but we did not check it. There are still no errors, because 2-PSK only looks at the sign of I and all the symbols stay on their side; with more points per circle, these symbols would be wrong.}
 
     \begin{figure}[H]
         \centering
